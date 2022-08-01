@@ -23,7 +23,13 @@ export function Input(
   );
 }
 
-export type Validation = { formData: Record<string, ZodType> };
+export type Validation = {
+  formData: Record<string, ZodType>;
+  onError: (
+    req: Request,
+    ctx: HandlerContext<any, State & { validatedData: object }>,
+  ) => Response;
+};
 
 export function withValidation(
   validation: Validation,
@@ -48,10 +54,7 @@ export function withValidation(
       if (e instanceof z.ZodError) {
         ctx.state.session.flash("errors", e.issues);
 
-        return new Response(null, {
-          status: 303,
-          headers: { Location: "/test-form" },
-        });
+        return validation.onError(req, ctx);
       }
 
       throw e;
