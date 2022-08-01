@@ -14,9 +14,23 @@ export function setup() {
 }
 
 export function startDev() {
+  const cwd = new URL(".", Deno.env.get("CWD")).pathname;
+
   const process = Deno.run({
     cmd: ["supabase", "start"],
-    cwd: new URL(".", Deno.env.get("CWD")).pathname,
+    cwd,
+  });
+
+  Deno.addSignalListener("SIGINT", async () => {
+    const process = Deno.run({
+      cmd: ["supabase", "stop"],
+      cwd,
+      stdout: "null",
+    });
+
+    await process.status();
+
+    Deno.exit(0);
   });
 
   return process.status();
