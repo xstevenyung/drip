@@ -45,7 +45,7 @@ export function withValidation(
     const formData = await req.formData();
     const data: Record<string, string> = {};
     formData.forEach((value, key) => {
-      data[key] = String(value);
+      data[key] = value as string;
     });
 
     try {
