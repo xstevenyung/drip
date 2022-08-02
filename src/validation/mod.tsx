@@ -9,7 +9,7 @@ export function error(errors, key) {
   return errors.find((error) => error.path.includes(key));
 }
 
-export const formDataZod = {
+export const formDataValidator = {
   ...baseZod,
   // We handle checkbox "on" value
   boolean(params?: any) {
@@ -36,7 +36,7 @@ export function Input(
 }
 
 export type Validation = {
-  formData: (z: any) => Record<string, ZodType>;
+  formData: Record<string, ZodType>;
   onError: (
     req: Request,
     ctx: HandlerContext<any, State & { validatedData: object }>,
@@ -81,7 +81,7 @@ export function withValidation(
     });
 
     try {
-      ctx.state.validatedData = baseZod.object(validation.formData(formDataZod))
+      ctx.state.validatedData = baseZod.object(validation.formData)
         .parse(Object.fromEntries(data));
     } catch (e) {
       if (e instanceof baseZod.ZodError) {
