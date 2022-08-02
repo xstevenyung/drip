@@ -21,18 +21,6 @@ export function startDev() {
     cwd,
   });
 
-  Deno.addSignalListener("SIGINT", async () => {
-    const process = Deno.run({
-      cmd: ["supabase", "stop"],
-      cwd,
-      stdout: "null",
-    });
-
-    await process.status();
-
-    Deno.exit(0);
-  });
-
   return process.status();
 }
 
