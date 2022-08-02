@@ -8,6 +8,7 @@ export const handler: Handlers = {
       message: z.string().min(2),
       count: z.number(),
       shouldSend: z.boolean(),
+      additionalRequest: z.string().array().min(1),
     }),
     onError: () => {
       return redirect("/messages/new");

@@ -11,6 +11,7 @@ export function error(errors, key) {
 
 export const formDataZod = {
   ...baseZod,
+  // We handle checkbox "on" value
   boolean(params?: any) {
     return baseZod.union([
       baseZod.literal("on").transform(() => true),
@@ -54,23 +55,34 @@ export function withValidation(
     ctx: HandlerContext<any, State & { validatedData: object }>,
   ) => {
     const formData = await req.formData();
-    const data: Record<string, any> = {};
+    const data = new Map();
     formData.forEach((value: any, key) => {
+      // Turn all empty string to undefined for later validation
       if (value === "") {
         value = undefined;
       }
 
+      // Transform valid number as number
       if (!Number.isNaN(Number(value))) {
         value = Number(value);
       }
-      console.log(value);
 
-      data[key] = value;
+      // handle input suffixed w/ `[]`
+      const matches = key.match(/(.+)\[\]/);
+      if (matches) {
+        key = matches[1];
+        value = (data.has(key) ? [...data.get(key), value] : [value])
+          .filter(Boolean);
+      }
+
+      data.set(key, value);
+
+      // TODO file
     });
 
     try {
       ctx.state.validatedData = baseZod.object(validation.formData(formDataZod))
-        .parse(data);
+        .parse(Object.fromEntries(data));
     } catch (e) {
       if (e instanceof baseZod.ZodError) {
         ctx.state.session.flash("errors", e.issues);
