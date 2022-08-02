@@ -9,6 +9,7 @@ export const handler: Handlers = {
       count: formDataValidator.number(),
       shouldSend: formDataValidator.boolean(),
       additionalRequest: formDataValidator.string().array().min(1),
+      sentAt: formDataValidator.date(),
     },
     onError: () => {
       return redirect("/messages/new");

@@ -19,6 +19,7 @@ export default function ({ data }) {
         <input type="number" name="count" />
         <input type="checkbox" name="shouldSend" />
         <input type="text" name="additionalRequest[]" />
+        <input type="date" name="sentAt" />
         <button type="submit">Send</button>
       </form>
     </>

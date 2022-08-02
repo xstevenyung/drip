@@ -67,6 +67,10 @@ export function withValidation(
         value = Number(value);
       }
 
+      if (typeof value === "string" && !isNaN(Date.parse(value))) {
+        value = new Date(value);
+      }
+
       // handle input suffixed w/ `[]`
       const matches = key.match(/(.+)\[\]/);
       if (matches) {
