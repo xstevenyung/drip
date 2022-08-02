@@ -7,8 +7,9 @@ import * as $1 from "./routes/dashboard/_middleware.ts";
 import * as $2 from "./routes/dashboard/index.tsx";
 import * as $3 from "./routes/index.tsx";
 import * as $4 from "./routes/login.tsx";
-import * as $5 from "./routes/register.tsx";
-import * as $6 from "./routes/test-form.tsx";
+import * as $5 from "./routes/messages/index.ts";
+import * as $6 from "./routes/messages/new.tsx";
+import * as $7 from "./routes/register.tsx";
 import * as $$0 from "./islands/PollForm.tsx";
 
 const manifest = {
@@ -18,8 +19,9 @@ const manifest = {
     "./routes/dashboard/index.tsx": $2,
     "./routes/index.tsx": $3,
     "./routes/login.tsx": $4,
-    "./routes/register.tsx": $5,
-    "./routes/test-form.tsx": $6,
+    "./routes/messages/index.ts": $5,
+    "./routes/messages/new.tsx": $6,
+    "./routes/register.tsx": $7,
   },
   islands: {
     "./islands/PollForm.tsx": $$0,

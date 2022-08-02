@@ -1,7 +1,7 @@
 /** @jsx h */
 /** @jsxFrag Fragment */
 import { Fragment, h } from "preact";
-import { Handlers, PageProps } from "fresh/server.ts";
+import { Handlers, PageProps } from "drip/server.ts";
 import { database } from "drip/database.ts";
 import { TableRow } from "@/types/database.gen.ts";
 import { State } from "./_middleware.ts";
