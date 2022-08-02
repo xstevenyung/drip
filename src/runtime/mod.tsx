@@ -30,7 +30,6 @@ export function Form(
         setState("submitting");
 
         setFormData(new FormData(e.target));
-        console.log(formData);
         await fetch(action || window.location.pathname, {
           method,
           body: formData,
