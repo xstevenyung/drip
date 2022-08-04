@@ -39,7 +39,7 @@ export function sourceToJSON(source: FormData | URLSearchParams) {
   return data;
 }
 
-export function wrapFormDataSchema(schema) {
+export function wrapStringySchema(schema) {
   Object.entries(schema).forEach(([key, value]) => {
     if (value instanceof ZodString) {
       schema[key] = z.preprocess(
@@ -101,7 +101,11 @@ export function withValidation(
   ) => Response | Promise<Response>,
 ) {
   if (validation.formData) {
-    validation.formData = wrapFormDataSchema(validation.formData);
+    validation.formData = wrapStringySchema(validation.formData);
+  }
+
+  if (validation.searchParams) {
+    validation.searchParams = wrapStringySchema(validation.searchParams);
   }
 
   return async (
