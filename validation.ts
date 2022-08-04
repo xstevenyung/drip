@@ -1,1 +1,1 @@
-export * from "./src/validation/mod.tsx";
+export * from "./src/validation/mod.ts";
