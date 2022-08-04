@@ -4,7 +4,10 @@ import {
   ZodBigInt,
   ZodBoolean,
   ZodDate,
+  ZodError,
+  ZodIssue,
   ZodNumber,
+  ZodRawShape,
   ZodString,
   ZodType,
 } from "./deps.ts";
@@ -12,7 +15,7 @@ import { HandlerContext } from "../deps/fresh/server.ts";
 import type { State } from "../server/mod.ts";
 import { redirectBack } from "../helpers/mod.ts";
 
-export function error(errors, key) {
+export function error(errors: ZodIssue[], key: string) {
   if (!errors) return null;
   return errors.find((error) => error.path.includes(key));
 }
@@ -20,7 +23,7 @@ export function error(errors, key) {
 export type Validation = {
   formData?: Record<string, ZodType>;
   searchParams?: Record<string, ZodType>;
-  body?: Record<string, ZodType>;
+  json?: Record<string, ZodType>;
   onError?: (
     req: Request,
     ctx: HandlerContext<any, State & { validatedData: object }>,
@@ -38,10 +41,10 @@ export function sourceToJSON(source: FormData | URLSearchParams) {
   return data;
 }
 
-export function wrapStringySchema(schema) {
-  Object.entries(schema).forEach(([key, value]) => {
+export function wrapStringyShape(shape: ZodRawShape) {
+  Object.entries(shape).forEach(([key, value]) => {
     if (value instanceof ZodString) {
-      schema[key] = z.preprocess(
+      shape[key] = z.preprocess(
         (value) => {
           if (value === "") value = undefined;
           return value;
@@ -51,7 +54,7 @@ export function wrapStringySchema(schema) {
     }
 
     if (value instanceof ZodNumber || value instanceof ZodBigInt) {
-      schema[key] = z.preprocess(
+      shape[key] = z.preprocess(
         (value) => {
           if (value === "") value = undefined;
           return !Number.isNaN(Number(value)) ? Number(value) : value;
@@ -61,7 +64,7 @@ export function wrapStringySchema(schema) {
     }
 
     if (value instanceof ZodDate) {
-      schema[key] = z.preprocess(
+      shape[key] = z.preprocess(
         (value) => {
           if (typeof value !== "string") return undefined;
           return !isNaN(Date.parse(value)) ? new Date(value) : value;
@@ -71,7 +74,7 @@ export function wrapStringySchema(schema) {
     }
 
     if (value instanceof ZodBoolean) {
-      schema[key] = z.preprocess(
+      shape[key] = z.preprocess(
         (value) => {
           return value === "on" ? true : false;
         },
@@ -80,7 +83,7 @@ export function wrapStringySchema(schema) {
     }
 
     if (value instanceof ZodArray) {
-      schema[key] = z.preprocess(
+      shape[key] = z.preprocess(
         (value) => {
           return Array.isArray(value) ? value.filter(Boolean) : [];
         },
@@ -89,7 +92,49 @@ export function wrapStringySchema(schema) {
     }
   });
 
-  return schema;
+  return shape;
+}
+
+export function validateSearchParams(req: Request, shape: ZodRawShape) {
+  const { searchParams } = new URL(req.url);
+  return z.object(wrapStringyShape(shape))
+    .parseAsync(sourceToJSON(searchParams))
+    .then((validatedData) => ({ validatedData, errors: null }))
+    .catch((e) => {
+      if (e instanceof ZodError) {
+        return { validatedData: null, errors: e.issues };
+      }
+
+      throw e;
+    });
+}
+
+export async function validateFormData(req: Request, shape: ZodRawShape) {
+  const formData = await req.formData();
+  return z.object(wrapStringyShape(shape))
+    .parseAsync(sourceToJSON(formData))
+    .then((validatedData) => ({ validatedData, errors: null }))
+    .catch((e) => {
+      if (e instanceof ZodError) {
+        return { validatedData: null, errors: e.issues };
+      }
+
+      throw e;
+    });
+}
+
+export async function validateJSON(req: Request, shape: ZodRawShape) {
+  const data = await req.json();
+  return z.object(wrapStringyShape(shape))
+    .parseAsync(data)
+    .then((validatedData) => ({ validatedData, errors: null }))
+    .catch((e) => {
+      if (e instanceof ZodError) {
+        return { validatedData: null, errors: e.issues };
+      }
+
+      throw e;
+    });
 }
 
 export function withValidation(
@@ -100,11 +145,11 @@ export function withValidation(
   ) => Response | Promise<Response>,
 ) {
   if (validation.formData) {
-    validation.formData = wrapStringySchema(validation.formData);
+    validation.formData = wrapStringyShape(validation.formData);
   }
 
   if (validation.searchParams) {
-    validation.searchParams = wrapStringySchema(validation.searchParams);
+    validation.searchParams = wrapStringyShape(validation.searchParams);
   }
 
   return async (
@@ -134,12 +179,12 @@ export function withValidation(
         };
       }
 
-      if (validation.body) {
+      if (validation.json) {
         const data = await req.json();
 
         ctx.state.validatedData = {
           ...ctx.state.validatedData,
-          ...z.object(validation.body).parse(data),
+          ...z.object(validation.json).parse(data),
         };
       }
     } catch (e) {
