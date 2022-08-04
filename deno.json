@@ -1,6 +1,8 @@
 {
   "tasks": {
-    "fixture": "deno run -A --watch=static/,routes/ ./tests/fixture/dev.ts"
+    "fixture": "deno run -A --watch=static/,routes/ ./tests/fixture/dev.ts",
+    "docs:dev": "npx vitepress dev docs",
+    "docs:build": "npx vitepress build docs"
   },
   "importMap": "./tests/fixture/import_map.json"
 }
