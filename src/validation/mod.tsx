@@ -3,6 +3,7 @@ import { h } from "../deps/preact.ts";
 import { z as baseZod, ZodType } from "./deps.ts";
 import { HandlerContext } from "../deps/fresh/server.ts";
 import type { State } from "../server/mod.ts";
+import { redirectBack } from "../helpers/mod.ts";
 
 export function error(errors, key) {
   if (!errors) return null;
@@ -37,7 +38,7 @@ export function Input(
 
 export type Validation = {
   formData: Record<string, ZodType>;
-  onError: (
+  onError?: (
     req: Request,
     ctx: HandlerContext<any, State & { validatedData: object }>,
   ) => Response;
@@ -91,7 +92,9 @@ export function withValidation(
       if (e instanceof baseZod.ZodError) {
         ctx.state.session.flash("errors", e.issues);
 
-        return validation.onError(req, ctx);
+        return validation.onError
+          ? validation.onError(req, ctx)
+          : redirectBack(req, { fallback: "/" });
       }
 
       throw e;

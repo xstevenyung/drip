@@ -10,3 +10,11 @@ export function json(data: object | null) {
     headers: { "Content-Type": "application/json" },
   });
 }
+
+export type RedirectBackOptions = {
+  fallback: string;
+};
+
+export function redirectBack(req: Request, options: RedirectBackOptions) {
+  return redirect(req.headers.get("Referer") ?? options.fallback);
+}

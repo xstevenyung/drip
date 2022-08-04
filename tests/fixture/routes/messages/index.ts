@@ -11,11 +11,7 @@ export const handler: Handlers = {
       additionalRequest: formDataValidator.string().array().min(1),
       sentAt: formDataValidator.date(),
     },
-    onError: () => {
-      return redirect("/messages/new");
-    },
-  }, (_req, ctx) => {
-    console.log(ctx.state.validatedData);
+  }, () => {
     return redirect("/messages/new");
   }),
 };
