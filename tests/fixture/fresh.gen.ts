@@ -11,6 +11,7 @@ import * as $5 from "./routes/messages/index.ts";
 import * as $6 from "./routes/messages/new.tsx";
 import * as $7 from "./routes/register.tsx";
 import * as $$0 from "./islands/PollForm.tsx";
+import * as $$1 from "./islands/TestForm.tsx";
 
 const manifest = {
   routes: {
@@ -25,6 +26,7 @@ const manifest = {
   },
   islands: {
     "./islands/PollForm.tsx": $$0,
+    "./islands/TestForm.tsx": $$1,
   },
   baseUrl: import.meta.url,
 };

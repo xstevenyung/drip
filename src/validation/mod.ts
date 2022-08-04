@@ -12,6 +12,7 @@ import {
 import { HandlerContext } from "../deps/fresh/server.ts";
 import type { State } from "../server/mod.ts";
 import { redirectBack } from "../helpers/mod.ts";
+import { toJson } from "https://esm.sh/v89/@supabase/realtime-js@1.7.3/dist/module/lib/transformers.d.ts";
 
 export function error(errors, key) {
   if (!errors) return null;
@@ -19,18 +20,20 @@ export function error(errors, key) {
 }
 
 export type Validation = {
-  formData: Record<string, ZodType>;
+  formData?: Record<string, ZodType>;
+  searchParams?: Record<string, ZodType>;
+  body?: Record<string, ZodType>;
   onError?: (
     req: Request,
     ctx: HandlerContext<any, State & { validatedData: object }>,
   ) => Response;
 };
 
-export function formDataToJSON(formData: FormData) {
+export function sourceToJSON(source: FormData | URLSearchParams) {
   let data: Record<string, any> = {};
 
-  formData.forEach((_, key) => {
-    const values = formData.getAll(key);
+  source.forEach((_, key) => {
+    const values = source.getAll(key);
     data[key] = values.length === 1 ? values[0] : values;
   });
 
@@ -98,24 +101,61 @@ export function withValidation(
     ctx: HandlerContext<any, State & { validatedData: object }>,
   ) => Response | Promise<Response>,
 ) {
-  validation.formData = wrapFormDataSchema(validation.formData);
+  if (validation.formData) {
+    validation.formData = wrapFormDataSchema(validation.formData);
+  }
 
   return async (
     req: Request,
     ctx: HandlerContext<any, State & { validatedData: object }>,
   ) => {
-    const formData = await req.formData();
+    ctx.state.validatedData = {};
 
     try {
-      ctx.state.validatedData = z.object(validation.formData)
-        .parse(formDataToJSON(formData));
+      if (validation.searchParams) {
+        const { searchParams } = new URL(req.url);
+
+        ctx.state.validatedData = {
+          ...ctx.state.validatedData,
+          ...z.object(validation.searchParams).parse(
+            sourceToJSON(searchParams),
+          ),
+        };
+      }
+
+      if (validation.formData) {
+        const formData = await req.formData();
+
+        ctx.state.validatedData = {
+          ...ctx.state.validatedData,
+          ...z.object(validation.formData).parse(sourceToJSON(formData)),
+        };
+      }
+
+      if (validation.body) {
+        const data = await req.json();
+
+        ctx.state.validatedData = {
+          ...ctx.state.validatedData,
+          ...z.object(validation.body).parse(data),
+        };
+      }
     } catch (e) {
       if (e instanceof z.ZodError) {
-        ctx.state.session.flash("errors", e.issues);
+        if (req.headers.get("Content-Type") === "application/json") {
+          return validation.onError
+            ? validation.onError(req, ctx)
+            : new Response(JSON.stringify(e.issues), {
+              status: 422,
+              headers: { "Content-Type": "application/json" },
+            });
+        } else {
+          ctx.state.session.flash("errors", e.issues);
 
-        return validation.onError
-          ? validation.onError(req, ctx)
-          : redirectBack(req, { fallback: "/" });
+          return validation.onError
+            ? validation.onError(req, ctx)
+            : redirectBack(req, { fallback: "/" });
+        }
       }
 
       throw e;

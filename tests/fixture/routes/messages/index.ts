@@ -1,17 +1,16 @@
 import { Handlers } from "drip/server.ts";
-import { redirect } from "drip/helpers.ts";
-import { formDataValidator, withValidation } from "drip/validation.ts";
+import { withValidation, z } from "drip/validation.ts";
 
 export const handler: Handlers = {
   POST: withValidation({
-    formData: {
-      message: formDataValidator.string().min(2),
-      count: formDataValidator.number(),
-      shouldSend: formDataValidator.boolean(),
-      additionalRequest: formDataValidator.string().array().min(1),
-      sentAt: formDataValidator.date(),
+    searchParams: {
+      message: z.string().min(2),
+      // count: z.number().min(12),
+      // shouldSend: z.boolean(),
+      // additionalRequest: z.string().array().min(1),
+      // sentAt: z.date(),
     },
-  }, () => {
-    return redirect("/messages/new");
+  }, (req) => {
+    return new Response(null, { status: 204 });
   }),
 };
