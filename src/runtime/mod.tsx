@@ -43,4 +43,18 @@ export function Form(
   );
 }
 
+// export type InputProps = { errors: any[]; name: string; class: string };
+
+// export function Input(
+//   { errors, name, class: className, ...forwardedProps }: InputProps,
+// ) {
+//   return (
+//     <input
+//       {...{ name }}
+//       {...forwardedProps}
+//       class={[className, error(errors, name) ? "invalid" : ""].join(" ")}
+//     />
+//   );
+// }
+
 export * from "../deps/fresh/runtime.ts";

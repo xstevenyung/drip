@@ -12,7 +12,6 @@ import {
 import { HandlerContext } from "../deps/fresh/server.ts";
 import type { State } from "../server/mod.ts";
 import { redirectBack } from "../helpers/mod.ts";
-import { toJson } from "https://esm.sh/v89/@supabase/realtime-js@1.7.3/dist/module/lib/transformers.d.ts";
 
 export function error(errors, key) {
   if (!errors) return null;
@@ -164,19 +163,5 @@ export function withValidation(
     return handler(req, ctx);
   };
 }
-
-// export type InputProps = { errors: any[]; name: string; class: string };
-
-// export function Input(
-//   { errors, name, class: className, ...forwardedProps }: InputProps,
-// ) {
-//   return (
-//     <input
-//       {...{ name }}
-//       {...forwardedProps}
-//       class={[className, error(errors, name) ? "invalid" : ""].join(" ")}
-//     />
-//   );
-// }
 
 export * from "./deps.ts";
