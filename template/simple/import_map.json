@@ -1,9 +1,9 @@
 {
   "imports": {
     "@/": "./",
-    "drip/": "https://deno.land/x/drip@0.0.1/",
-    "preact": "https://esm.sh/preact@10.10.0",
-    "preact/": "https://esm.sh/preact@10.10.0/",
-    "preact-render-to-string": "https://esm.sh/preact-render-to-string@5.2.0?deps=preact@10.8.2"
+    "drip/": "https://deno.land/x/drip@0.0.9/",
+    "preact": "https://esm.sh/preact@10.10.1",
+    "preact/": "https://esm.sh/preact@10.10.1/",
+    "preact-render-to-string": "https://esm.sh/preact-render-to-string@5.2.1?external=preact"
   }
 }
