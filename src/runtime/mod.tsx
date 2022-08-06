@@ -1,24 +1,25 @@
 /** @jsx h */
 import { h, useState } from "./deps.ts";
+import { validateFormData, ZodIssue, ZodRawShape } from "../validation/mod.ts";
 
-export type FormState = "pending" | "submitting" | "submitted";
-
-export type FormErrors = Record<string, string[]> | null;
-
+export type FormState = "idle" | "submitting";
 export type FormProps = {
-  children: (
-    data: { state: FormState; errors: FormErrors },
-  ) => any;
-  method: string;
+  method?: string;
   action?: string;
+  children: (
+    data: { data: any; state: FormState; errors: ZodIssue[] | null },
+  ) => any;
+  shape: ZodRawShape;
 };
 
 export function Form(
-  { children, method, action, ...forwardedProps }: FormProps,
+  { method = "get", action, children, shape, ...forwardedProps }:
+    & FormProps
+    & Record<any, any>,
 ) {
-  const [state, setState] = useState<FormState>("pending");
-  const [errors, setErrors] = useState<FormErrors>(null);
-  const [formData, setFormData] = useState<FormData | null>(null);
+  const [data, setData] = useState(null);
+  const [errors, setErrors] = useState<ZodIssue[] | null>(null);
+  const [state, setState] = useState<FormState>("idle");
 
   return (
     <form
@@ -27,34 +28,42 @@ export function Form(
       onSubmit={async (e) => {
         e.preventDefault();
 
+        setErrors(null);
+
+        // We can even do client-side validation with the exact same code!
+        const { validatedData, errors: validationErrors } =
+          await validateFormData(
+            new FormData(e.target),
+            shape,
+          );
+
+        if (validationErrors) {
+          setErrors(validationErrors);
+          return null;
+        }
+
         setState("submitting");
 
-        setFormData(new FormData(e.target));
         await fetch(action || window.location.pathname, {
           method,
-          body: formData,
-        });
+          body: JSON.stringify(validatedData),
+          headers: { "Content-Type": "application/json" },
+        }).then(async (response) => {
+          // We handle server-side errors in case there is some
+          if (response.status === 422) {
+            const { errors } = await response.json();
+            return setErrors(errors);
+          }
 
-        setState("submitted");
+          setData(await response.json());
+        }).finally(() => {
+          setState("idle");
+        });
       }}
     >
-      {children({ state, errors })}
+      {children({ data, state, errors })}
     </form>
   );
 }
-
-// export type InputProps = { errors: any[]; name: string; class: string };
-
-// export function Input(
-//   { errors, name, class: className, ...forwardedProps }: InputProps,
-// ) {
-//   return (
-//     <input
-//       {...{ name }}
-//       {...forwardedProps}
-//       class={[className, error(errors, name) ? "invalid" : ""].join(" ")}
-//     />
-//   );
-// }
 
 export * from "../deps/fresh/runtime.ts";

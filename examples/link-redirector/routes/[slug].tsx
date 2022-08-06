@@ -7,19 +7,21 @@ export const handler: Handlers = {
   async GET(_req, ctx) {
     const { slug } = ctx.params;
 
-    const { data, error } = await database.from<TableRow<"links">>("links")
+    const { data, error } = await database.from<TableRow<"links">>(
+      "links",
+    )
       .select()
       .eq("slug", slug)
-      .single();
+      .limit(1);
 
     if (error) {
       return new Response(null, { status: 500 });
     }
 
-    if (!data) {
+    if (!data.length) {
       return new Response(null, { status: 404 });
     }
 
-    return redirect(data?.target_url);
+    return redirect(data[0].target_url);
   },
 };
