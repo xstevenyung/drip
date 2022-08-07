@@ -1,11 +1,20 @@
-# fresh project
+# Link redirector
 
-### Usage
+Project powered by Drip 💧
 
-Start the project:
+## Run
 
+## Run the project
+
+```bash
+deno run start
 ```
-deno task start
-```
 
-This will watch the project directory and restart as necessary.
+## Run Tailwind.css
+
+We use Tailwind.css instead of traditional Twind to be able to run the latest
+version.
+
+```bash
+deno task tailwind:dev
+```
