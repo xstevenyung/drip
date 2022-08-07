@@ -4,6 +4,6 @@
     "drip/": "../../",
     "preact": "https://esm.sh/preact@10.8.2",
     "preact/": "https://esm.sh/preact@10.8.2/",
-    "preact-render-to-string": "https://esm.sh/preact-render-to-string@5.2.1?external=preact
+    "preact-render-to-string": "https://esm.sh/preact-render-to-string@5.2.1?external=preact"
   }
 }

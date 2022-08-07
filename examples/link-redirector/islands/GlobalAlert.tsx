@@ -1,12 +1,9 @@
 /** @jsx h */
 import { h } from "preact";
-// import { state } from "@/stores/drip.ts";
 import { useGlobalStore } from "drip/runtime.ts";
 
 export default function () {
   const { _errors: errors, _success: success } = useGlobalStore();
-
-  console.log({ success });
 
   if (errors?.length) {
     return (
