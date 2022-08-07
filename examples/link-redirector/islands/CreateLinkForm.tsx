@@ -5,12 +5,18 @@ import { Form } from "drip/runtime.ts";
 import shape from "@/validations/link.ts";
 import { updateGlobalStore } from "drip/runtime.ts";
 
-export default function () {
+export type Props = { baseURL: string };
+
+export default function ({ baseURL }: Props) {
   return (
     <Form
       method="POST"
       shape={shape}
-      onSuccess={() => updateGlobalStore({ _success: "Sucessfully updated" })}
+      onSuccess={(data) => {
+        updateGlobalStore({
+          _success: `Sucessfully created: ${baseURL}/${data.slug}`,
+        });
+      }}
       class="space-y-6"
     >
       {({ status }, { error }) => {
@@ -70,7 +76,7 @@ export default function () {
                 class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 disabled={status !== "idle"}
               >
-                {status === "idle" ? "Create it!" : (
+                {status === "idle" ? "Let's go!" : (
                   <svg
                     class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                     xmlns="http://www.w3.org/2000/svg"

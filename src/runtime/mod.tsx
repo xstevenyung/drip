@@ -130,6 +130,7 @@ export function Form(
             if (response.status < 300) {
               const body = await response.text();
               const data = body.length > 0 ? JSON.parse(body) : null;
+              console.log({ data });
               dispatch({ type: "data", value: data });
 
               target.reset();

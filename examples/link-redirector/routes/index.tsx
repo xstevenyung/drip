@@ -19,8 +19,9 @@ export const handler: Handlers<Data> = {
       return new Response(JSON.stringify({ errors }), { status: 422 });
     }
 
-    const { error } = await database.from<TableRow<"links">>("links")
-      .insert(validatedData);
+    const { error, data } = await database.from<TableRow<"links">>("links")
+      .insert(validatedData)
+      .single();
 
     if (error) {
       console.error(error);
@@ -28,7 +29,7 @@ export const handler: Handlers<Data> = {
       return new Response(null, { status: 500 });
     }
 
-    return new Response(null, { status: 204 });
+    return new Response(JSON.stringify(data), { status: 201 });
   },
 };
 
@@ -37,18 +38,32 @@ export default function ({}: PageProps<Data>) {
     <main class="h-screen bg-gray-50">
       <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create you first link redirection free & forever
-          </h2>
+          <h1 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            ⚡️ Drip Link Redirector
+          </h1>
+          <p class="text-gray-500 text-center">
+            Create simple redirection for free & forever
+          </p>
         </div>
 
         <GlobalAlert />
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <CreateLinkForm />
+            <CreateLinkForm baseURL={Deno.env.get("APP_URL") as string} />
           </div>
         </div>
+
+        <p class="text-gray-500 text-center pt-4 text-sm">
+          Build with max speed with{" "}
+          <a
+            href="https://github.com/xstevenyung/drip"
+            target="_blank"
+            class="text-green-600 font-semibold hover:underline hover:text-green-700 transition-all duration-200"
+          >
+            Drip
+          </a>.
+        </p>
       </div>
     </main>
   );
