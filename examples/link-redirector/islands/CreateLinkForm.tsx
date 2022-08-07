@@ -1,8 +1,6 @@
 /** @jsx h */
 /** @jsxFrag Fragment */
 import { Fragment, h } from "preact";
-import { useEffect } from "preact/hooks";
-import { error, z } from "drip/validation.ts";
 import { Form } from "drip/runtime.ts";
 import shape from "@/validations/link.ts";
 import { updateGlobalStore } from "drip/runtime.ts";
@@ -12,12 +10,10 @@ export default function () {
     <Form
       method="POST"
       shape={shape}
-      onSuccess={() => {
-        updateGlobalStore({ _success: "Sucessfully updated" });
-      }}
+      onSuccess={() => updateGlobalStore({ _success: "Sucessfully updated" })}
       class="space-y-6"
     >
-      {({ errors, status }) => {
+      {({ status }, { error }) => {
         return (
           <>
             <div>
@@ -25,7 +21,7 @@ export default function () {
                 for="slug"
                 class={[
                   "block text-sm font-medium",
-                  error(errors, "slug") ? "text-red-500" : "text-gray-700",
+                  error("slug") ? "text-red-500" : "text-gray-700",
                 ].join(" ")}
               >
                 Slug
@@ -37,9 +33,7 @@ export default function () {
                   type="text"
                   class={[
                     "appearance-none block w-full px-3 py-2 border  rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
-                    error(errors, "slug")
-                      ? "border-red-300"
-                      : "border-gray-300",
+                    error("slug") ? "border-red-300" : "border-gray-300",
                   ].join(" ")}
                   placeholder="my-awesome-link"
                 />
@@ -51,9 +45,7 @@ export default function () {
                 for="target-url"
                 class={[
                   "block text-sm font-medium",
-                  error(errors, "target_url")
-                    ? "text-red-500"
-                    : "text-gray-700",
+                  error("target_url") ? "text-red-500" : "text-gray-700",
                 ].join(" ")}
               >
                 Target URL
@@ -65,9 +57,7 @@ export default function () {
                   type="text"
                   class={[
                     "appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
-                    error(errors, "target_url")
-                      ? "border-red-300"
-                      : "border-gray-300",
+                    error("target_url") ? "border-red-300" : "border-gray-300",
                   ].join(" ")}
                   placeholder="https://my-awesome-portfolio.com"
                 />
