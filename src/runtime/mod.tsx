@@ -1,5 +1,5 @@
 /** @jsx h */
-import { h, useReducer } from "./deps.ts";
+import { h, JSX, useReducer } from "./deps.ts";
 import {
   error as findError,
   validateFormData,
@@ -62,7 +62,7 @@ export function Form(
     ...forwardedProps
   }:
     & FormProps
-    & Record<any, any>,
+    & JSX.HTMLAttributes<HTMLFormElement>,
 ) {
   const [formState, dispatch] = useReducer<
     {
