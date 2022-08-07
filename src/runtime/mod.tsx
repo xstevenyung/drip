@@ -1,13 +1,23 @@
 /** @jsx h */
 import { h, useReducer } from "./deps.ts";
-import { validateFormData, ZodIssue, ZodRawShape } from "../validation/mod.ts";
+import {
+  error as findError,
+  validateFormData,
+  ZodIssue,
+  ZodRawShape,
+} from "../validation/mod.ts";
 import { makeStore, useStore } from "./deps.ts";
 
-const initialGlobalStore = { _errors: null, _success: null };
+export type GlobalStoreState = {
+  _errors: ZodIssue[] | null | undefined;
+  _success: string | null | undefined;
+} & Record<string, any>;
 
-const globalStore = makeStore({ ...initialGlobalStore });
+const initialGlobalStore: GlobalStoreState = { _errors: null, _success: null };
 
-export function updateGlobalStore(newState: any) {
+const globalStore = makeStore<GlobalStoreState>({ ...initialGlobalStore });
+
+export function updateGlobalStore(newState: Partial<GlobalStoreState>) {
   globalStore.set((state) => ({ ...state, ...newState }));
 }
 
@@ -18,17 +28,23 @@ export function resetGlobalStore() {
 export const useGlobalStore = () => useStore(globalStore);
 
 export type FormStatus = "idle" | "submitting";
+
+export type FormState = {
+  data: any;
+  errors: ZodIssue[] | null | undefined;
+  status: FormStatus;
+};
+
 export type FormProps = {
   method?: string;
   action?: string;
   children: (
-    data: { data: any; status: FormStatus; errors: ZodIssue[] | null },
+    state: FormState,
+    action: { error: (key: string) => ZodIssue | null | undefined },
   ) => any;
   onSuccess?: (data: any) => void;
   shape: ZodRawShape;
 };
-
-type FormState = { data: any; errors: ZodIssue[] | null; status: FormStatus };
 
 const initialFormState: FormState = {
   errors: null,
@@ -49,8 +65,15 @@ export function Form(
     & Record<any, any>,
 ) {
   const [formState, dispatch] = useReducer<
-    { data: any; errors: ZodIssue[] | null; status: FormStatus },
-    { type: "data" | "errors" | "status" | "reset"; value?: any }
+    {
+      data: any;
+      errors: ZodIssue[] | null | undefined | null;
+      status: FormStatus;
+    },
+    | { type: "errors"; value: ZodIssue[] | null | undefined }
+    | { type: "reset" }
+    | { type: "status"; value: FormStatus }
+    | { type: "data"; value?: any }
   >(
     (state, action) => {
       if (action.type === "reset") {
@@ -74,50 +97,56 @@ export function Form(
       onSubmit={async (e) => {
         e.preventDefault();
 
-        dispatch({ type: "reset" });
+        const { target } = e;
 
-        // We can even do client-side validation with the exact same code!
-        const { validatedData, errors: validationErrors } =
-          await validateFormData(
-            new FormData(e.target),
-            shape,
-          );
+        if (target instanceof HTMLFormElement) {
+          dispatch({ type: "reset" });
 
-        if (validationErrors) {
-          dispatch({ type: "errors", value: validationErrors });
-          return null;
-        }
+          // We can even do client-side validation with the exact same code!
+          const { validatedData, errors: validationErrors } =
+            await validateFormData(
+              new FormData(target),
+              shape,
+            );
 
-        dispatch({ type: "status", value: "submitting" });
-
-        await fetch(action || window.location.pathname, {
-          method,
-          body: JSON.stringify(validatedData),
-          headers: { "Content-Type": "application/json" },
-        }).then(async (response) => {
-          // We handle server-side errors in case there is some
-          if (response.status === 422) {
-            const { errors } = await response.json();
-            dispatch({ type: "errors", value: errors });
+          if (validationErrors) {
+            dispatch({ type: "errors", value: validationErrors });
+            return null;
           }
 
-          if (response.status < 300) {
-            const body = await response.text();
-            const data = body.length > 0 ? JSON.parse(body) : null;
-            dispatch({ type: "data", value: data });
+          dispatch({ type: "status", value: "submitting" });
 
-            e.target.reset();
-
-            if (handleSuccess) {
-              handleSuccess(data);
+          await fetch(action || window.location.pathname, {
+            method,
+            body: JSON.stringify(validatedData),
+            headers: { "Content-Type": "application/json" },
+          }).then(async (response) => {
+            // We handle server-side errors in case there is some
+            if (response.status === 422) {
+              const { errors } = await response.json();
+              dispatch({ type: "errors", value: errors });
             }
-          }
-        }).finally(() => {
-          dispatch({ type: "status", value: "idle" });
-        });
+
+            if (response.status < 300) {
+              const body = await response.text();
+              const data = body.length > 0 ? JSON.parse(body) : null;
+              dispatch({ type: "data", value: data });
+
+              target.reset();
+
+              if (handleSuccess) {
+                handleSuccess(data);
+              }
+            }
+          }).finally(() => {
+            dispatch({ type: "status", value: "idle" });
+          });
+        }
       }}
     >
-      {children({ ...formState })}
+      {children({ ...formState }, {
+        error: (key) => findError(formState.errors, key),
+      })}
     </form>
   );
 }
