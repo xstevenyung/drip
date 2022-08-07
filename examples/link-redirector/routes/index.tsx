@@ -23,21 +23,12 @@ export const handler: Handlers<Data> = {
       .insert(validatedData);
 
     if (error) {
-      // ctx.state.session.flash("_error", "Something went wrong");
-
       console.error(error);
 
-      // return redirectBack(req, { fallback: "/" });
       return new Response(null, { status: 500 });
     }
 
-    // ctx.state.session.flash("_success", "Link saved!");
-
-    // return redirectBack(req, { fallback: "/" });
-    return new Response(null, {
-      status: 204,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(null, { status: 204 });
   },
 };
 
