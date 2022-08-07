@@ -2,35 +2,16 @@
 /** @jsxFrag Fragment */
 import { Fragment, h } from "preact";
 import { Handlers, PageProps } from "drip/server.ts";
-import { validateJSON, z, ZodIssue } from "drip/validation.ts";
+import { validateJSON, z } from "drip/validation.ts";
 import { database } from "drip/database.ts";
 import { TableRow } from "@/types/database.gen.ts";
 import CreateLinkForm from "@/islands/CreateLinkForm.tsx";
 import GlobalAlert from "@/islands/GlobalAlert.tsx";
+import shape from "@/validations/link.ts";
 
-const shape = {
-  slug: z.string({ required_error: "Slug is required" })
-    .min(3, "Slug must be 3 characters long minimum")
-    .regex(/^[a-zA-Z-]+$/, "Slug is invalid"),
-  target_url: z.string({
-    required_error: "Target URL is required",
-    invalid_type_error: "Target URL is invalid",
-  })
-    .trim()
-    .url({ message: "Target URL is invalid" }),
-};
-
-export type Data = { errors?: ZodIssue[]; success?: string; error?: string };
+export type Data = {};
 
 export const handler: Handlers<Data> = {
-  GET(_req, ctx) {
-    const errors = ctx.state.session.flash("_errors");
-    const error = ctx.state.session.flash("_error");
-    const success = ctx.state.session.flash("_success");
-
-    return ctx.render({ success, errors, error });
-  },
-
   async POST(req, ctx) {
     const { validatedData, errors } = await validateJSON(req, shape);
 
@@ -53,11 +34,14 @@ export const handler: Handlers<Data> = {
     // ctx.state.session.flash("_success", "Link saved!");
 
     // return redirectBack(req, { fallback: "/" });
-    return new Response(null, { status: 204 });
+    return new Response(null, {
+      status: 204,
+      headers: { "Content-Type": "application/json" },
+    });
   },
 };
 
-export default function ({ data }: PageProps<Data>) {
+export default function ({}: PageProps<Data>) {
   return (
     <main class="h-screen bg-gray-50">
       <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">

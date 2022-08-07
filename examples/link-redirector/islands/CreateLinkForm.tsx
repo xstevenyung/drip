@@ -1,33 +1,23 @@
 /** @jsx h */
 /** @jsxFrag Fragment */
 import { Fragment, h } from "preact";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import { error, z } from "drip/validation.ts";
 import { Form } from "drip/runtime.ts";
-import { pointer } from "@/stores/drip.ts";
-import { Stores, useStore } from "fresh-store";
-
-const shape = {
-  slug: z.string({ required_error: "Slug is required" })
-    .min(3, "Slug must be 3 characters long minimum")
-    .regex(/^[a-zA-Z-]+$/, "Slug is invalid"),
-  target_url: z.string({
-    required_error: "Target URL is required",
-    invalid_type_error: "Target URL is invalid",
-  })
-    .trim()
-    .url({ message: "Target URL is invalid" }),
-};
+import shape from "@/validations/link.ts";
+import { updateGlobalStore } from "drip/runtime.ts";
 
 export default function () {
-  // console.log(store);
-
   return (
-    <Form method="POST" shape={shape} class="space-y-6">
-      {({ errors, state }) => {
-        useEffect(() => {
-          Stores.get(pointer)?.set({ errors, state });
-        }, [errors, state]);
+    <Form
+      method="POST"
+      shape={shape}
+      onSuccess={() => {
+        updateGlobalStore({ _success: "Sucessfully updated" });
+      }}
+      class="space-y-6"
+    >
+      {({ errors, status }) => {
         return (
           <>
             <div>
@@ -88,9 +78,9 @@ export default function () {
               <button
                 type="submit"
                 class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                disabled={state !== "idle"}
+                disabled={status !== "idle"}
               >
-                {state === "idle" ? "Create it!" : (
+                {status === "idle" ? "Create it!" : (
                   <svg
                     class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                     xmlns="http://www.w3.org/2000/svg"
