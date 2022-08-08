@@ -13,17 +13,6 @@ export function setup() {
   );
 }
 
-export function startDev() {
-  const cwd = new URL(".", Deno.env.get("CWD")).pathname;
-
-  const process = Deno.run({
-    cmd: ["supabase", "start"],
-    cwd,
-  });
-
-  return process.status();
-}
-
 export async function generateTypes() {
   const destination = new URL("./types/database.gen.ts", Deno.env.get("CWD"))
     .pathname;

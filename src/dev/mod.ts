@@ -3,11 +3,37 @@ import {
   generateTypes as generateDatabaseTypes,
   startDev as startSupabaseDev,
 } from "../supabase/mod.ts";
+import { blue, green } from "https://deno.land/std/fmt/colors.ts";
+
+function tagOutput(tag: string, output: Uint8Array) {
+  const tagColors = {
+    supabase: green,
+    tailwind: blue,
+  };
+  const color = (tag: string) => tagColors[tag];
+
+  return new TextDecoder()
+    .decode(output)
+    .split("\n")
+    .filter(Boolean)
+    .map((line) => `${color(tag)(`${tag} |`)} ${line}`)
+    .join("\n");
+}
 
 export function supabase() {
   return async () => {
     if (!Deno.env.get("SUPABASE_DEV_STARTED")) {
-      await startSupabaseDev();
+      const cwd = new URL(".", Deno.env.get("CWD")).pathname;
+
+      const process = Deno.run({
+        cmd: ["supabase", "start"],
+        cwd,
+        stdout: "piped",
+        stderr: "piped",
+      });
+
+      console.log(tagOutput("supabase", await process.output()));
+      console.error(tagOutput("supabase", await process.stderrOutput()));
     }
 
     Deno.env.set("SUPABASE_DEV_STARTED", "true");
@@ -19,10 +45,10 @@ export function supabase() {
 export type TailwindModuleOptions = { input: string; output: string };
 
 export function tailwind(options: TailwindModuleOptions) {
-  return () => {
+  return async () => {
     const cwd = new URL(".", Deno.env.get("CWD")).pathname;
 
-    return Deno.run({
+    const process = Deno.run({
       cmd: [
         "npx",
         "tailwindcss",
@@ -33,13 +59,17 @@ export function tailwind(options: TailwindModuleOptions) {
       ],
       cwd,
       stdout: "piped",
-    }).status();
+      stderr: "piped",
+    });
+
+    // Should uncomment and replace when https://github.com/tailwindlabs/tailwindcss/pull/9054 is merged
+    console.log(tagOutput("tailwind", await process.stderrOutput()));
   };
 }
 
 export type DripDevModule = () => Promise<any>;
 
-export function dev(
+export async function dev(
   base: string,
   entrypoint: string,
   modules?: DripDevModule[],
@@ -60,8 +90,10 @@ export function dev(
     });
   }
 
-  return Promise.all([
-    baseDev(base, entrypoint),
-    ...(modules ? modules.map((module) => module()) : []),
-  ]);
+  if (modules) {
+    await Promise.all(modules.map((module) => module()));
+    console.log();
+  }
+
+  return baseDev(base, entrypoint);
 }
