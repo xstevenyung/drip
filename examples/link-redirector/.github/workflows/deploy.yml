@@ -25,6 +25,14 @@ jobs:
       - name: Push Migrations
         run: supabase db push
 
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - run: npm install
+
+      - run: npx tailwindcss -i ./styles/main.css -o ./static/styles/main.css -m
+
       - uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
