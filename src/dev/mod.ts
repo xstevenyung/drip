@@ -1,10 +1,10 @@
 import { configSync, dev as baseDev } from "./deps.ts";
-import {
-  generateTypes as generateDatabaseTypes,
-  startDev as startSupabaseDev,
-} from "../supabase/mod.ts";
+// import {
+//   // generateTypes as generateDatabaseTypes,
+//   // startDev as startSupabaseDev,
+// } from "../supabase/mod.ts";
 
-export async function dev(base: string, entrypoint: string) {
+export function dev(base: string, entrypoint: string) {
   Deno.env.set("CWD", base);
 
   // copied from https://deno.land/std@0.148.0/dotenv/load.ts
@@ -22,12 +22,12 @@ export async function dev(base: string, entrypoint: string) {
   }
 
   if (!Deno.env.get("SUPABASE_DEV_STARTED")) {
-    await startSupabaseDev();
+    // await startSupabaseDev();
   }
 
   Deno.env.set("SUPABASE_DEV_STARTED", "true");
 
-  generateDatabaseTypes();
+  // generateDatabaseTypes();
 
   return baseDev(base, entrypoint);
 }
