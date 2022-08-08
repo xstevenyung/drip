@@ -2,7 +2,7 @@
 layout: home
 hero:
   name: Drip
-  text: Start now, launch a prototype tomorrow
+  text: Start today, launch tomorrow
   # tagline: Lorem ipsum...
   # image:
   #   src: /logo.png
