@@ -39,7 +39,7 @@ export default function ({}: PageProps<Data>) {
       <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
           <h1 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            ⚡️ Drip Link Redirector
+            Drip Link Redirector 💧
           </h1>
           <p class="text-gray-500 text-center">
             Create simple redirection for free & forever
@@ -55,7 +55,7 @@ export default function ({}: PageProps<Data>) {
         </div>
 
         <p class="text-gray-500 text-center pt-4 text-sm">
-          Build with max speed with{" "}
+          ⚡️ Powered by{" "}
           <a
             href="https://github.com/xstevenyung/drip"
             target="_blank"

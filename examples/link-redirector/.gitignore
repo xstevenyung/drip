@@ -1,5 +1,6 @@
 .env
 node_modules
+static/styles/main.css
 
 # Supabase
 **/supabase/.branches
