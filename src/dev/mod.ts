@@ -1,8 +1,5 @@
 import { configSync, dev as baseDev } from "./deps.ts";
-import {
-  generateTypes as generateDatabaseTypes,
-  startDev as startSupabaseDev,
-} from "../supabase/mod.ts";
+import { generateTypes as generateDatabaseTypes } from "../supabase/mod.ts";
 import { blue, green } from "https://deno.land/std/fmt/colors.ts";
 
 function tagOutput(tag: string, output: Uint8Array) {
