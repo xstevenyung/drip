@@ -10,10 +10,10 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: /installation
+      link: /guide/installation
     - theme: alt
       text: Why Drip?
-      link: /why-drip
+      link: /guide/why-drip
     - theme: alt
       text: View on GitHub
       link: https://github.com/xstevenyung/drip
