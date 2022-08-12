@@ -1,4 +1,4 @@
-import Login from "./login.tsx";
-import Register from "./register.tsx";
+import LoginPage from "./login.tsx";
+import RegisterPage from "./register.tsx";
 
-export { Login, Register };
+export { LoginPage, RegisterPage };

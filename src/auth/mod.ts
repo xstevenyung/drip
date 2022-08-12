@@ -1,6 +1,7 @@
 import type { Handlers, MiddlewareHandlerContext } from "./deps.ts";
 import type { State } from "../server/mod.ts";
 import { database, User } from "../supabase/mod.ts";
+import { validateFormData, z } from "../validation/mod.ts";
 
 export type AuthState = { user: User | null } & State;
 
@@ -43,12 +44,15 @@ export function createLoginHandlers(
 
   return {
     async POST(req, ctx) {
-      const formData = await req.formData();
+      const { validatedData, errors: validationErrors } =
+        await validateFormData(req, {
+          email: z.string().email(),
+          password: z.string(),
+        });
 
-      const email = formData.get("email") as string;
-      const password = formData.get("password") as string;
+      if (validationErrors) {
+        ctx.state.session.flash("_errors", validationErrors);
 
-      if (!email && !password) {
         return new Response(null, {
           status: 303,
           headers: {
@@ -57,10 +61,8 @@ export function createLoginHandlers(
         });
       }
 
-      const { user, error, session } = await database.auth.signIn({
-        email,
-        password,
-      });
+      const { user, error, session } = await database.auth
+        .signIn(validatedData);
 
       if (!user || !session || error) {
         return new Response(null, {
@@ -91,12 +93,15 @@ export function createRegisterHandlers(
 
   return {
     async POST(req, ctx) {
-      const formData = await req.formData();
+      const { validatedData, errors: validationErrors } =
+        await validateFormData(req, {
+          email: z.string().email(),
+          password: z.string(),
+        });
 
-      const email = formData.get("email") as string;
-      const password = formData.get("password") as string;
+      if (validationErrors) {
+        ctx.state.session.flash("_errors", validationErrors);
 
-      if (!email && !password) {
         return new Response(null, {
           status: 303,
           headers: {
@@ -105,14 +110,9 @@ export function createRegisterHandlers(
         });
       }
 
-      await database.auth.signUp({
-        email,
-        password,
-      });
-      const { user, error, session } = await database.auth.signIn({
-        email,
-        password,
-      });
+      await database.auth.signUp(validatedData);
+      const { user, error, session } = await database.auth
+        .signIn(validatedData);
 
       if (!user || !session || error) {
         return new Response(null, {

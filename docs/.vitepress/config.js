@@ -9,7 +9,7 @@ export default {
 
     sidebar: [
       {
-        text: "Guide",
+        text: "Getting Started",
         items: [
           { text: "Why Drip?", link: "/guide/why-drip" },
           { text: "Installation", link: "/guide/installation" },
@@ -19,73 +19,15 @@ export default {
       },
 
       {
-        text: "Routes",
-        collapsible: true,
-        collapsed: true,
+        text: "Guide",
         items: [
-          { text: "Introduction", link: "/routes/introduction" },
-        ],
-      },
-
-      {
-        text: "Database",
-        collapsible: true,
-        collapsed: true,
-        items: [
-          { text: "Introduction", link: "/database/introduction" },
-        ],
-      },
-
-      {
-        text: "Session",
-        collapsible: true,
-        collapsed: true,
-        items: [
-          { text: "Introduction", link: "/session/introduction" },
-        ],
-      },
-
-      {
-        text: "Authentication",
-        collapsible: true,
-        collapsed: true,
-        items: [
-          { text: "Introduction", link: "/auth/introduction" },
-          { text: "Starter Kit", link: "/auth/starter-kit" },
-        ],
-      },
-
-      {
-        text: "Forms",
-        collapsible: true,
-        collapsed: true,
-        items: [
-          { text: "Introduction", link: "/forms/introduction" },
-          { text: "Plain HTML Form", link: "/forms/html-form" },
-          { text: "Drip Form", link: "/forms/drip-form" },
-        ],
-      },
-
-      {
-        text: "Validation",
-        collapsible: true,
-        collapsed: true,
-        items: [
-          { text: "Introduction", link: "/validation/introduction" },
-          {
-            text: "Client-side Validation",
-            link: "/validation/client-side-validation",
-          },
-        ],
-      },
-
-      {
-        text: "Deploy",
-        collapsible: true,
-        collapsed: true,
-        items: [
-          { text: "Deno Deploy", link: "/deploy/deno-deploy" },
-          { text: "Supabase", link: "/deploy/supabase" },
+          { text: "Routes", link: "/routes" },
+          { text: "Database", link: "/database" },
+          { text: "Session", link: "/session" },
+          { text: "Authentication", link: "/authentication" },
+          { text: "Forms", link: "/forms" },
+          { text: "Validation", link: "/validation" },
+          { text: "Deploy", link: "/deploy" },
         ],
       },
 
