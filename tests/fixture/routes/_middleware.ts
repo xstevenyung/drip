@@ -1,8 +1,8 @@
-import type { MiddlewareHandlerContext } from "drip/server.ts";
-import { session } from "drip/server.ts";
+import { MiddlewareHandlerContext, session } from "drip/server.ts";
 
-export type State = session.WithSession;
-
-export function handler(req: Request, ctx: MiddlewareHandlerContext<State>) {
+export function handler(
+  req: Request,
+  ctx: MiddlewareHandlerContext<session.WithSession>,
+) {
   return session.cookieSession(req, ctx);
 }

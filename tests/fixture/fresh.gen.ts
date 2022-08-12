@@ -2,31 +2,25 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
-import * as $0 from "./routes/_middleware.ts";
-import * as $1 from "./routes/dashboard/_middleware.ts";
-import * as $2 from "./routes/dashboard/index.tsx";
-import * as $3 from "./routes/index.tsx";
-import * as $4 from "./routes/login.tsx";
-import * as $5 from "./routes/messages/index.ts";
-import * as $6 from "./routes/messages/new.tsx";
-import * as $7 from "./routes/register.tsx";
-import * as $$0 from "./islands/PollForm.tsx";
-import * as $$1 from "./islands/TestForm.tsx";
+import * as $0 from "./routes/[name].tsx";
+import * as $1 from "./routes/_middleware.ts";
+import * as $2 from "./routes/api/joke.ts";
+import * as $3 from "./routes/dashboard.tsx";
+import * as $4 from "./routes/index.tsx";
+import * as $5 from "./routes/register.tsx";
+import * as $$0 from "./islands/Counter.tsx";
 
 const manifest = {
   routes: {
-    "./routes/_middleware.ts": $0,
-    "./routes/dashboard/_middleware.ts": $1,
-    "./routes/dashboard/index.tsx": $2,
-    "./routes/index.tsx": $3,
-    "./routes/login.tsx": $4,
-    "./routes/messages/index.ts": $5,
-    "./routes/messages/new.tsx": $6,
-    "./routes/register.tsx": $7,
+    "./routes/[name].tsx": $0,
+    "./routes/_middleware.ts": $1,
+    "./routes/api/joke.ts": $2,
+    "./routes/dashboard.tsx": $3,
+    "./routes/index.tsx": $4,
+    "./routes/register.tsx": $5,
   },
   islands: {
-    "./islands/PollForm.tsx": $$0,
-    "./islands/TestForm.tsx": $$1,
+    "./islands/Counter.tsx": $$0,
   },
   baseUrl: import.meta.url,
 };

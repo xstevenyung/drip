@@ -1,5 +1,9 @@
-import { createLoginHandlers, Register } from "drip/auth.ts";
+import { createRegisterHandlers } from "drip/auth.ts";
+import { RegisterPage } from "drip/auth.ts";
 
-export const handler = createLoginHandlers();
+export const handler = createRegisterHandlers({
+  url: "/register",
+  afterSuccessfulURL: "/dashboard",
+});
 
-export default Register;
+export default RegisterPage;

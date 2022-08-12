@@ -1,38 +1,20 @@
 /** @jsx h */
-/** @jsxFrag Fragment */
-import { Fragment, h } from "preact";
-import { Handlers, PageProps } from "drip/server.ts";
-import { database } from "drip/database.ts";
-import { TableRow } from "@/types/database.gen.ts";
-import { State } from "./_middleware.ts";
-import PollForm from "@/islands/PollForm.tsx";
+import { h } from "preact";
+import Counter from "@/islands/Counter.tsx";
 
-export type Data = { polls: TableRow<"polls">[] };
-
-export const handler: Handlers<Data, State> = {
-  async GET(_req, ctx) {
-    const polls =
-      (await database.from<TableRow<"polls">>("polls").select()).data || [];
-    return ctx.render({ polls });
-  },
-
-  async POST(req) {
-    const formData = await req.formData();
-
-    await database.from<TableRow<"polls">>("polls").insert({
-      question: formData.get("question") as string,
-    });
-
-    return new Response(null, { status: 204 });
-  },
-};
-
-export default function ({ data }: PageProps) {
+export default function Home() {
   return (
-    <>
-      <div>{JSON.stringify(data)}</div>
-
-      <PollForm />
-    </>
+    <div>
+      <img
+        src="/logo.svg"
+        height="100px"
+        alt="the fresh logo: a sliced lemon dripping with juice"
+      />
+      <p>
+        Welcome to `fresh`. Try update this message in the ./routes/index.tsx
+        file, and refresh.
+      </p>
+      <Counter start={3} />
+    </div>
   );
 }

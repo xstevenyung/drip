@@ -6,5 +6,4 @@
 
 import { start } from "drip/server.ts";
 import manifest from "./fresh.gen.ts";
-
 await start(manifest);
