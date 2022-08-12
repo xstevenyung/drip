@@ -31,6 +31,13 @@ If you need to customize the registration page template, you can always copy the
 [template source code](https://github.com/xstevenyung/drip/blob/main/src/auth/template/register.tsx)
 to customize it yourself
 
+::: info
+
+The only requirement when customizing the registration template is to send a
+`POST` request with `username` and `password`.
+
+:::
+
 ## Login page
 
 ```tsx
@@ -52,6 +59,13 @@ export default LoginPage;
 If you need to customize the registration page template, you can always copy the
 [template source code](https://github.com/xstevenyung/drip/blob/main/src/auth/template/login.tsx)
 to customize it yourself
+
+::: info
+
+The only requirement when customizing the login template is to send a `POST`
+request with `username` and `password`.
+
+:::
 
 ## Forget password / Reset password
 
