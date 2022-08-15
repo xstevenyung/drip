@@ -26,29 +26,27 @@ export default {
           { text: "Session", link: "/session" },
           { text: "Authentication", link: "/authentication" },
           { text: "Forms", link: "/forms" },
-          { text: "Validation", link: "/validation" },
           { text: "Deploy", link: "/deploy" },
         ],
       },
+      // {
+      //   text: "Advanced",
+      //   items: [
+      //     { text: "Stores", link: "/advanced/stores" },
+      //     { text: "Typescript", link: "/advanced/typescript" },
+      //   ],
+      // },
 
-      {
-        text: "Advanced",
-        items: [
-          { text: "Stores", link: "/advanced/stores" },
-          { text: "Typescript", link: "/advanced/typescript" },
-        ],
-      },
-
-      {
-        text: "Screencasts",
-        items: [
-          { text: "Link Redirector", link: "/screencasts/link-redirector" },
-          {
-            text: "Charge with Stripe",
-            link: "/screencasts/charge-with-stripe",
-          },
-        ],
-      },
+      // {
+      //   text: "Screencasts",
+      //   items: [
+      //     { text: "Link Redirector", link: "/screencasts/link-redirector" },
+      //     {
+      //       text: "Charge with Stripe",
+      //       link: "/screencasts/charge-with-stripe",
+      //     },
+      //   ],
+      // },
     ],
   },
 };
