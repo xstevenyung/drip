@@ -2,7 +2,7 @@
 /** @jsxFrag Fragment */
 import { Fragment, h } from "preact";
 import { Handlers, PageProps } from "drip/server.ts";
-import { validateJSON, z } from "drip/validation.ts";
+import { validateJSON } from "drip/validation.ts";
 import { database } from "drip/database.ts";
 import { TableRow } from "@/types/database.gen.ts";
 import CreateLinkForm from "@/islands/CreateLinkForm.tsx";
@@ -39,10 +39,10 @@ export default function ({}: PageProps<Data>) {
       <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
           <h1 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Drip Link Redirector 💧
+            LNK
           </h1>
           <p class="text-gray-500 text-center">
-            Create simple redirection for free & forever
+            Short link for free, forever
           </p>
         </div>
 
@@ -62,7 +62,7 @@ export default function ({}: PageProps<Data>) {
             class="text-green-600 font-semibold hover:underline hover:text-green-700 transition-all duration-200"
           >
             Drip
-          </a>.
+          </a>
         </p>
       </div>
     </main>
