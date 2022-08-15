@@ -8,7 +8,7 @@ export default function ({ Component }: AppProps) {
   return (
     <>
       <Head>
-        <title>Link Redirector powered by Drip</title>
+        <title>LNK by Drip</title>
         <link rel="stylesheet" href={asset("/styles/main.css")} />
       </Head>
 

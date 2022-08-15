@@ -1,20 +1,9 @@
-# Link redirector
+# LNK
 
-Project powered by Drip 💧
+Powered by [Drip](https://github.com/xstevenyung/drip) 💧
 
-## Run
-
-## Run the project
+## Run locally
 
 ```bash
-deno run start
-```
-
-## Run Tailwind.css
-
-We use Tailwind.css instead of traditional Twind to be able to run the latest
-version.
-
-```bash
-deno task tailwind:dev
+deno task start
 ```

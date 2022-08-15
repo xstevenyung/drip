@@ -16,14 +16,14 @@ jobs:
       - name: Install Supabase CLI
         run: brew install supabase/tap/supabase
 
-      - name: Set Remote DB
+      - name: Run migration
         shell: bash
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-        run: supabase db remote set $SUPABASE_URL
-
-      - name: Push Migrations
-        run: supabase db push
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          supabase link --project-ref qqoqbuazmxefhgndugew -p $DATABASE_PASSWORD
+          supabase db push -p $DATABASE_PASSWORD
 
       - uses: actions/setup-node@v3
         with:
@@ -40,6 +40,6 @@ jobs:
       - name: Deploy to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: your-deno-deploy-project # the name of the project on Deno Deploy
+          project: lnk # the name of the project on Deno Deploy
           entrypoint: main.ts # the entrypoint to deploy
           import-map: import_map.json
