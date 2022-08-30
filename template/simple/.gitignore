@@ -1,4 +1,5 @@
 .env
+static/styles/main.css
 
 # Supabase
 **/supabase/.branches
