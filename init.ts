@@ -1,5 +1,8 @@
-// std
-import { join, resolve } from "https://deno.land/std@0.150.0/path/mod.ts";
+import {
+  basename,
+  join,
+  resolve,
+} from "https://deno.land/std@0.150.0/path/mod.ts";
 import { parse } from "https://deno.land/std@0.150.0/flags/mod.ts";
 import { gte } from "https://deno.land/std@0.150.0/semver/mod.ts";
 import {
@@ -380,7 +383,7 @@ if (useVSCode) {
 const SUPABASE_CONFIG =
   `# A string used to distinguish different Supabase projects on the same host. Defaults to the working
 # directory name when running \`supabase init\`.
-project_id = "simple"
+project_id = "${basename(resolvedDirectory)}"
 
 [api]
 # Port to use for the API URL.
