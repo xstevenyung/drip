@@ -151,11 +151,11 @@ await Deno.writeTextFile(
 const importMap = {
   "imports": {
     "@/": "./",
-    "drip/": "https://deno.land/x/drip@0.0.16/",
-    "preact": "https://deno.land/x/drip@0.0.16/preact/mod.ts",
-    "preact/hooks": "https://deno.land/x/drip@0.0.16/preact/hooks.ts",
+    "drip/": "https://deno.land/x/drip@0.0.17/",
+    "preact": "https://deno.land/x/drip@0.0.17/preact/mod.ts",
+    "preact/hooks": "https://deno.land/x/drip@0.0.17/preact/hooks.ts",
     "preact-render-to-string":
-      "https://deno.land/x/drip@0.0.16/preact/render-to-string.ts",
+      "https://deno.land/x/drip@0.0.17/preact/render-to-string.ts",
   },
 };
 
