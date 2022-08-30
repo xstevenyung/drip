@@ -13,6 +13,7 @@ export default {
         items: [
           { text: "Why Drip?", link: "/guide/why-drip" },
           { text: "Installation", link: "/guide/installation" },
+          { text: "Create a project", link: "/guide/create-project" },
           { text: "Directory Structure", link: "/guide/directory-structure" },
           { text: "Philosophy", link: "/guide/philosophy" },
         ],
