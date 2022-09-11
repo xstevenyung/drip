@@ -8,7 +8,7 @@ import { gte } from "https://deno.land/std@0.150.0/semver/mod.ts";
 import {
   collect,
   generate,
-} from "https://deno.land/x/fresh@1.0.2/src/dev/mod.ts";
+} from "https://deno.land/x/fresh@1.1.0/src/dev/mod.ts";
 
 export function printError(message: string) {
   console.error(`%cerror%c: ${message}`, "color: red; font-weight: bold", "");
