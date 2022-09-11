@@ -192,6 +192,23 @@ await Deno.writeTextFile(
   ROUTES_INDEX_TSX,
 );
 
+let MIDDLEWARE_TS =
+  `import { MiddlewareHandlerContext, session } from "drip/server.ts";
+
+export type State = session.WithSession;
+
+export function handler(
+  req: Request,
+  ctx: MiddlewareHandlerContext<State>,
+) {
+  return session.cookieSession(req, ctx);
+}
+`;
+await Deno.writeTextFile(
+  join(resolvedDirectory, "routes", "_middleware.ts"),
+  MIDDLEWARE_TS,
+);
+
 const COMPONENTS_BUTTON_TSX = `/** @jsx h */
 import { h } from "preact";
 import { IS_BROWSER } from "drip/runtime.ts";
