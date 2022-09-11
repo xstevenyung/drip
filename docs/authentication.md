@@ -13,9 +13,9 @@ out-of-the-box.
 
 ```tsx
 // routes/register.tsx
-import { createRegisterHandlers, RegisterPage } from "drip/auth.ts";
+import { createRegisterHandler, RegisterPage } from "drip/auth.ts";
 
-export const handler = createRegisterHandlers({
+export const handler = createRegisterHandler({
   // Change it to match in what file your are placing your code
   url: "/register",
   // Change it to match where you want to redirect the user on successfully register
