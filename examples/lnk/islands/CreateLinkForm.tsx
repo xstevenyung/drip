@@ -1,6 +1,3 @@
-/** @jsx h */
-/** @jsxFrag Fragment */
-import { Fragment, h } from "preact";
 import { Form } from "drip/runtime.ts";
 import shape from "@/validations/link.ts";
 import { updateGlobalStore } from "drip/runtime.ts";

@@ -1,5 +1,4 @@
-/** @jsx h */
-import { h, JSX, useReducer } from "./deps.ts";
+import { JSX, useReducer } from "./deps.ts";
 import {
   error as findError,
   validateFormData,

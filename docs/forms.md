@@ -18,7 +18,6 @@ new redirection to our links.
 
 ```tsx
 // routes/index.tsx
-/** @jsx h */
 import { h } from "preact";
 import { Handlers } from "drip/server.ts";
 import { redirectBack } from "drip/helpers.ts";
@@ -55,8 +54,6 @@ server.
 
 ```tsx{10-13}
 // routes/index.tsx
-/** @jsx h */
-import { h } from "preact";
 import { Handlers } from "drip/server.ts";
 import { redirectBack } from "drip/helpers.ts";
 import { validateFormData, z } from "drip/validation.ts";
@@ -103,8 +100,6 @@ those errors down to our form to show the users what is wrong.
 
 ```tsx{10-12}
 // routes/index.tsx
-/** @jsx h */
-import { h } from "preact";
 import { Handlers } from "drip/server.ts";
 import { redirectBack } from "drip/helpers.ts";
 import { validateFormData, z, error } from "drip/validation.ts";
@@ -164,8 +159,6 @@ component will be used in an island to enable a lot of client-side magic
 
 ```tsx
 // islands/CreateLinkForm.tsx
-/** @jsx h */
-import { h } from "preact";
 
 export default function () {
   return (

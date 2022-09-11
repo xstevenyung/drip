@@ -1,6 +1,3 @@
-/** @jsx h */
-/** @jsxFrag Fragment */
-import { Fragment, h } from "preact";
 import { Handlers, PageProps } from "drip/server.ts";
 import { validateJSON } from "drip/validation.ts";
 import { database } from "drip/database.ts";

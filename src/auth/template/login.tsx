@@ -1,7 +1,3 @@
-/** @jsx h */
-/** @jsxFrag Fragment */
-import { Fragment, h } from "../deps.ts";
-
 export default function () {
   return (
     <>

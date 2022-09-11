@@ -1,9 +1,11 @@
 {
   "imports": {
     "@/": "./",
-    "drip/": "https://deno.land/x/drip@0.0.19/",
-    "preact": "https://deno.land/x/drip@0.0.19/preact/mod.ts",
-    "preact/hooks": "https://deno.land/x/drip@0.0.19/preact/hooks.ts",
-    "preact-render-to-string": "https://deno.land/x/drip@0.0.19/preact/render-to-string.ts"
+    "drip/": "../../",
+    "preact": "../../preact/mod.ts",
+    "preact/hooks": "../../preact/hooks.ts",
+    "preact-render-to-string": "../../preact/render-to-string.ts",
+    "preact/debug": "../../preact/debug.ts",
+    "preact/jsx-runtime": "../../preact/jsx-runtime.ts"
   }
 }

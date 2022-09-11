@@ -39,9 +39,6 @@ based on its file name.
 component like below, it will be accessible via `/about`
 
 ```tsx
-/** @jsx h */
-import { h } from "preact";
-
 export default function About() {
   return <h1>About</h1>;
 }
@@ -104,8 +101,6 @@ to display the information to the user.
 
 ```tsx
 // /routes/user/[name].tsx
-/** @jsx h */
-import { h } from "preact";
 import { Handlers, PageProps } from "drip/server.ts";
 
 type Data = { bio: string };
@@ -143,8 +138,6 @@ possible to create API endpoints.
 
 ```tsx
 // /routes/api/user/[name].tsx
-/** @jsx h */
-import { h } from "preact";
 import { Handlers, PageProps } from "drip/server.ts";
 import { json } from "drip/helpers.ts";
 

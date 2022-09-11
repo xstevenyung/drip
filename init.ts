@@ -151,11 +151,11 @@ await Deno.writeTextFile(
 const importMap = {
   "imports": {
     "@/": "./",
-    "drip/": "https://deno.land/x/drip@0.0.19/",
-    "preact": "https://deno.land/x/drip@0.0.19/preact/mod.ts",
-    "preact/hooks": "https://deno.land/x/drip@0.0.19/preact/hooks.ts",
+    "drip/": "https://deno.land/x/drip@0.0.20/",
+    "preact": "https://deno.land/x/drip@0.0.20/preact/mod.ts",
+    "preact/hooks": "https://deno.land/x/drip@0.0.20/preact/hooks.ts",
     "preact-render-to-string":
-      "https://deno.land/x/drip@0.0.19/preact/render-to-string.ts",
+      "https://deno.land/x/drip@0.0.20/preact/render-to-string.ts",
   },
 };
 
@@ -170,10 +170,7 @@ await Deno.writeTextFile(
   IMPORT_MAP_JSON,
 );
 
-let ROUTES_INDEX_TSX = `/** @jsx h */
-import { h } from "preact";\n`;
-// if (useTwind) ROUTES_INDEX_TSX += `import { tw } from "@twind";\n`;
-ROUTES_INDEX_TSX += `import Counter from "../islands/Counter.tsx";
+const ROUTES_INDEX_TSX = `import Counter from "../islands/Counter.tsx";
 
 export default function Home() {
   return (
@@ -209,9 +206,7 @@ await Deno.writeTextFile(
   MIDDLEWARE_TS,
 );
 
-const COMPONENTS_BUTTON_TSX = `/** @jsx h */
-import { h } from "preact";
-import { IS_BROWSER } from "drip/runtime.ts";
+const COMPONENTS_BUTTON_TSX = `import { IS_BROWSER } from "drip/runtime.ts";
 export function Button(props: h.JSX.HTMLAttributes<HTMLButtonElement>) {
   return (
     <button
@@ -226,9 +221,7 @@ await Deno.writeTextFile(
   COMPONENTS_BUTTON_TSX,
 );
 
-const ISLANDS_COUNTER_TSX = `/** @jsx h */
-import { h } from "preact";
-import { useState } from "preact/hooks";
+const ISLANDS_COUNTER_TSX = `import { useState } from "preact/hooks";
 import { Button } from "../components/Button.tsx";
 
 interface CounterProps {
@@ -251,9 +244,7 @@ await Deno.writeTextFile(
   ISLANDS_COUNTER_TSX,
 );
 
-const ROUTES_GREET_TSX = `/** @jsx h */
-import { h } from "preact";
-import { PageProps } from "drip/server.ts";
+const ROUTES_GREET_TSX = `import { PageProps } from "drip/server.ts";
 
 export default function Greet(props: PageProps) {
   return <div>Hello {props.params.name}</div>;

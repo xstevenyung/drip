@@ -4,5 +4,9 @@
     "docs:dev": "npx vitepress dev docs",
     "docs:build": "npx vitepress build docs"
   },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
+  },
   "importMap": "./tests/fixture/import_map.json"
 }

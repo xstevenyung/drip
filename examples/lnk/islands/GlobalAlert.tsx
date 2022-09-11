@@ -1,5 +1,3 @@
-/** @jsx h */
-import { h } from "preact";
 import { useGlobalStore } from "drip/runtime.ts";
 
 export default function () {
