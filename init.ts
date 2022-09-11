@@ -156,6 +156,9 @@ const importMap = {
     "preact/hooks": "https://deno.land/x/drip@0.0.20/preact/hooks.ts",
     "preact-render-to-string":
       "https://deno.land/x/drip@0.0.20/preact/render-to-string.ts",
+    "preact/debug": "https://deno.land/x/drip@0.0.20/preact/debug.ts",
+    "preact/jsx-runtime":
+      "https://deno.land/x/drip@0.0.20/preact/jsx-runtime.ts",
   },
 };
 
