@@ -340,6 +340,10 @@ const config = {
   tasks: {
     start: "deno run -A --watch=static/,routes/ dev.ts",
   },
+  compilerOptions: {
+    jsx: "react-jsx",
+    jsxImportSource: "preact",
+  },
   importMap: "./import_map.json",
 };
 const DENO_CONFIG = JSON.stringify(config, null, 2) + "\n";
