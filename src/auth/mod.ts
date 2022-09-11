@@ -38,7 +38,7 @@ export function createAuthMiddleware(options: AuthMiddlewareOptions) {
   };
 }
 
-export function createLoginHandlers(
+export function createLoginHandler(
   options: Partial<HandlersOptions> = {},
 ): Handlers<null, State> {
   const opts = { ...DEFAULT_HANDLERS_OPTIONS, ...options };
@@ -72,7 +72,7 @@ export function createLoginHandlers(
   };
 }
 
-export function createRegisterHandlers(
+export function createRegisterHandler(
   options: Partial<HandlersOptions> = {},
 ): Handlers<any, State> {
   const opts = { ...DEFAULT_HANDLERS_OPTIONS, ...options };
