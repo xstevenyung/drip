@@ -2,6 +2,7 @@ import type { Handlers, MiddlewareHandlerContext } from "./deps.ts";
 import type { State } from "../server/mod.ts";
 import { database, User } from "../supabase/mod.ts";
 import { validateFormData, z } from "../validation/mod.ts";
+import { redirect, redirectBack } from "../helpers/mod.ts";
 
 export type AuthState = { user: User | null } & State;
 
@@ -53,35 +54,20 @@ export function createLoginHandlers(
       if (validationErrors) {
         ctx.state.session.flash("_errors", validationErrors);
 
-        return new Response(null, {
-          status: 303,
-          headers: {
-            Location: opts.url,
-          },
-        });
+        return redirectBack(req, { fallback: opts.url });
       }
 
       const { user, error, session } = await database.auth
         .signIn(validatedData);
 
       if (!user || !session || error) {
-        return new Response(null, {
-          status: 303,
-          headers: {
-            Location: opts.url,
-          },
-        });
+        return redirectBack(req, { fallback: opts.url });
       }
 
       ctx.state.session.set("token", session.access_token);
       ctx.state.session.set("userId", user.id);
 
-      return new Response(null, {
-        status: 303,
-        headers: {
-          Location: opts.afterSuccessfulURL,
-        },
-      });
+      return redirect(opts.afterSuccessfulURL);
     },
   };
 }
@@ -102,12 +88,7 @@ export function createRegisterHandlers(
       if (validationErrors) {
         ctx.state.session.flash("_errors", validationErrors);
 
-        return new Response(null, {
-          status: 303,
-          headers: {
-            Location: opts.url,
-          },
-        });
+        return redirectBack(req, { fallback: opts.url });
       }
 
       await database.auth.signUp(validatedData);
@@ -115,23 +96,37 @@ export function createRegisterHandlers(
         .signIn(validatedData);
 
       if (!user || !session || error) {
-        return new Response(null, {
-          status: 303,
-          headers: {
-            Location: opts.url,
-          },
-        });
+        return redirectBack(req, { fallback: opts.url });
       }
 
       ctx.state.session.set("token", session.access_token);
       ctx.state.session.set("userId", user.id);
 
-      return new Response(null, {
-        status: 303,
-        headers: {
-          Location: opts.afterSuccessfulURL,
-        },
+      return redirect(opts.afterSuccessfulURL);
+    },
+  };
+}
+
+export function createForgotPasswordHandler(
+  options: Partial<HandlersOptions> = {},
+): Handlers<any, State> {
+  const opts = { ...DEFAULT_HANDLERS_OPTIONS, ...options };
+
+  return {
+    async POST(req, ctx) {
+      const { validatedData, errors } = await validateFormData(req, {
+        email: z.string().email(),
       });
+
+      if (!validatedData || errors) {
+        ctx.state.session.flash("_errors", errors);
+
+        return redirectBack(req, { fallback: opts.url });
+      }
+
+      await database.auth.api.resetPasswordForEmail(validatedData.email);
+
+      return redirectBack(req, { fallback: opts.url });
     },
   };
 }
