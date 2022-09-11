@@ -108,7 +108,6 @@ await Deno.mkdir(join(resolvedDirectory, "components"), { recursive: true });
 await Deno.mkdir(join(resolvedDirectory, "islands"), { recursive: true });
 await Deno.mkdir(join(resolvedDirectory, "routes"), { recursive: true });
 await Deno.mkdir(join(resolvedDirectory, "static"), { recursive: true });
-await Deno.mkdir(join(resolvedDirectory, "stores"), { recursive: true });
 await Deno.mkdir(join(resolvedDirectory, "styles"), { recursive: true });
 await Deno.mkdir(join(resolvedDirectory, "supabase", "migrations"), {
   recursive: true,
@@ -159,6 +158,7 @@ const importMap = {
     "preact/debug": "https://deno.land/x/drip@0.0.20/preact/debug.ts",
     "preact/jsx-runtime":
       "https://deno.land/x/drip@0.0.20/preact/jsx-runtime.ts",
+    "preact/signals": "https://deno.land/x/drip@0.0.20/preact/signals.ts",
   },
 };
 

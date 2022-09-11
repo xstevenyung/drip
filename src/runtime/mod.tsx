@@ -5,7 +5,7 @@ import {
   ZodIssue,
   ZodRawShape,
 } from "../validation/mod.ts";
-import { makeStore, useStore } from "./deps.ts";
+import { signal, useSignal } from "../deps/preact/signals.ts";
 
 export type GlobalStoreState = {
   _errors: ZodIssue[] | null | undefined;
@@ -14,17 +14,17 @@ export type GlobalStoreState = {
 
 const initialGlobalStore: GlobalStoreState = { _errors: null, _success: null };
 
-const globalStore = makeStore<GlobalStoreState>({ ...initialGlobalStore });
+const globalStore = signal({ ...initialGlobalStore });
 
 export function updateGlobalStore(newState: Partial<GlobalStoreState>) {
-  globalStore.set((state) => ({ ...state, ...newState }));
+  globalStore.value = { ...globalStore.value, ...newState };
 }
 
 export function resetGlobalStore() {
-  globalStore.set({ ...initialGlobalStore });
+  globalStore.value = { ...initialGlobalStore };
 }
 
-export const useGlobalStore = () => useStore(globalStore);
+export const useGlobalStore = () => globalStore.value;
 
 export type FormStatus = "idle" | "submitting";
 
@@ -151,4 +151,3 @@ export function Form(
 }
 
 export * from "../deps/fresh/runtime.ts";
-export * from "../deps/statery.ts";

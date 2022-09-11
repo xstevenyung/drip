@@ -33,12 +33,6 @@ The `static` directory houses your assets such as images and CSS.
 This directory comes from
 [Fresh](https://fresh.deno.dev/docs/concepts/static-files).
 
-## The `/stores` Directory
-
-The `stores` directory houses all your stores for sharing state between islands.
-
-The stores are based on [Statery](https://github.com/hmans/statery).
-
 ## The `/supabase` Directory
 
 The `supabase` directory includes your database migrations and supabase
