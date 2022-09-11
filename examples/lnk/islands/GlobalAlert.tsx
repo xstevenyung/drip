@@ -1,7 +1,17 @@
-import { useGlobalStore } from "drip/runtime.ts";
+import { globalStore, useGlobalStore } from "drip/runtime.ts";
+import { computed, signal } from "preact/signals";
+
+export const success = signal<null | { Component: any; props: any }>(null);
+
+const state = computed(() => {
+  return {
+    ...globalStore.value,
+    _success: success.value,
+  };
+});
 
 export default function () {
-  const { _errors: errors, _success: success } = useGlobalStore();
+  const { _errors: errors, _success: success } = state.value;
 
   if (errors?.length) {
     return (
@@ -63,7 +73,7 @@ export default function () {
             </div>
             <div class="ml-3">
               <p class="text-sm font-medium text-green-800">
-                {success}
+                <success.Component {...success.props} />
               </p>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { Form } from "drip/runtime.ts";
 import shape from "@/validations/link.ts";
-import { updateGlobalStore } from "drip/runtime.ts";
+import { success } from "@/islands/GlobalAlert.tsx";
 
 export type Props = { baseURL: string };
 
@@ -10,38 +10,10 @@ export default function ({ baseURL }: Props) {
       method="POST"
       shape={shape}
       onSuccess={(data) => {
-        updateGlobalStore({
-          _success: (
-            <>
-              Sucessfully created
-
-              <button
-                type="button"
-                class="flex gap-0.5 items-center"
-                onClick={() => {
-                  navigator.clipboard
-                    .writeText(`${baseURL}/${data.slug}`);
-                }}
-              >
-                <span class="underline">{baseURL}/{data.slug}</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                  />
-                </svg>
-              </button>
-            </>
-          ),
-        });
+        success.value = {
+          Component: SuccessMessage,
+          props: { url: `${baseURL}/${data.slug}` },
+        };
       }}
       class="space-y-6"
     >
@@ -132,5 +104,37 @@ export default function ({ baseURL }: Props) {
         );
       }}
     </Form>
+  );
+}
+
+function SuccessMessage({ url }: { url: string }) {
+  return (
+    <>
+      Sucessfully created
+
+      <button
+        type="button"
+        class="flex gap-0.5 items-center"
+        onClick={() => {
+          navigator.clipboard.writeText(url);
+        }}
+      >
+        <span class="underline">{url}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+          />
+        </svg>
+      </button>
+    </>
   );
 }

@@ -14,7 +14,7 @@ export type GlobalStoreState = {
 
 const initialGlobalStore: GlobalStoreState = { _errors: null, _success: null };
 
-const globalStore = signal({ ...initialGlobalStore });
+export const globalStore = signal({ ...initialGlobalStore });
 
 export function updateGlobalStore(newState: Partial<GlobalStoreState>) {
   globalStore.value = { ...globalStore.value, ...newState };

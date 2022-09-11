@@ -6,6 +6,7 @@
     "preact/hooks": "../../preact/hooks.ts",
     "preact-render-to-string": "../../preact/render-to-string.ts",
     "preact/debug": "../../preact/debug.ts",
-    "preact/jsx-runtime": "../../preact/jsx-runtime.ts"
+    "preact/jsx-runtime": "../../preact/jsx-runtime.ts",
+    "preact/signals": "../../preact/signals.ts"
   }
 }
